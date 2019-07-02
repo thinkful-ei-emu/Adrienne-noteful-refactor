@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 //--------------->components
 import List from './components/List';
 import Navigation from './components/Navigation';
@@ -23,7 +23,7 @@ export default class App extends React.Component {
         </header>
       <main className="container">
         <div className='col'>
-        <Route exact path="/" render={(props)=>{return<div><Navigation {...props} folders={this.state.folders}/></div>}}/>
+        <Route exact path="/" render={(props)=>{return<Navigation {...props} folders={this.state.folders}/>}}/>
         <Route path="/folder/:folderId" render={(props)=>{return<Navigation {...props} folders={this.state.folders}/>}}/>
         <Route path='/note/:noteId' component={Navigation} />
         </div>
