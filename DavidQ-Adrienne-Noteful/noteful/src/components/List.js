@@ -1,5 +1,6 @@
 import React from 'react';
 import Note from './Note';
+import '../css/List.css';
 
 
 export default function List(props) {
@@ -7,7 +8,7 @@ export default function List(props) {
     return <Note key={index} name={note.name} id={note.id} modified={note.modified} folderId={note.folderId} />
   });
  return (
-   <div>
+   <div className="list container col-3">
      {singleNote}
      <button>Add Note</button>
    </div>

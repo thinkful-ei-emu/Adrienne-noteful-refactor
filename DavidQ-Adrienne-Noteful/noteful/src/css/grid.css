@@ -1,0 +1,21 @@
+.container{
+  display:grid;
+  grid-template-columns: auto auto auto auto;
+
+}
+
+.col{
+ grid-column: span 1;
+}
+.col-full{
+  grid-column: span 4;
+}
+.col-center{
+  grid-column: 1/span 2;
+}
+.col-half{
+  grid-column: span 2;
+}
+.col-3{
+  grid-column: span 3;
+}

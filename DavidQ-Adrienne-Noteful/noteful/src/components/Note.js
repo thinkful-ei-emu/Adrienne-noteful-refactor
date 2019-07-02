@@ -1,13 +1,14 @@
 import React from 'react';
+import '../css/note.css';
 
 export default function Note(props) {
 // const date = new Date(props.modified)
  return (
-   <>
+   <div className="note col-full">
      <p>{props.name}</p>
      <p>Date modified on {new Date(props.modified).toDateString()}</p>
      <button>Delete</button>
-   </>
+   </div>
  )
 }
 
