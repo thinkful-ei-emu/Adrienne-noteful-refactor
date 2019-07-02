@@ -1,19 +1,21 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import Note from './Note';
 import '../css/List.css';
 
 
 export default function List(props) {
   const singleNote = props.notes.map((note, index) => {
-    return <Note key={index} name={note.name} id={note.id} modified={note.modified} folderId={note.folderId} />
+    return(<div className='col-full'><Link key={index} to={'/note/' + note.id}><Note name={note.name} id={note.id} modified={note.modified} folderId={note.folderId} /></Link></div>)
   });
  return (
    <div className="list container col-3">
      {singleNote}
-     <button>Add Note</button>
+     <button className='col-center'>Add Note</button>
    </div>
  )
 }
+
 
 
 // note from dummy store

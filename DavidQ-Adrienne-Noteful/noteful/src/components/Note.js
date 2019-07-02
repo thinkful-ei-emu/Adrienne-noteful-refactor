@@ -2,7 +2,6 @@ import React from 'react';
 import '../css/note.css';
 
 export default function Note(props) {
-// const date = new Date(props.modified)
  return (
    <div className="note col-full">
      <p>{props.name}</p>

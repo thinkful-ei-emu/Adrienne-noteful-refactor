@@ -3,23 +3,20 @@ import Folder from './Folder';
 import {Link} from 'react-router-dom';
 export default function Navigation(props) {
 
-  let folders = props.folders.map((folder,index)=>{
+let folders = '';
+
+if (props.folders) {folders = props.folders.map((folder,index)=>{
     return (
-    < Link key={index} to = {"/"+ folder.id}>
+    <Link key={index} to = {"/folder/"+ folder.id}>
     <Folder  id={folder.id} name={folder.name}/>
-    </ Link>)
+    </Link>)
   });
+}
  return (
    <div>
+     {!props.folders && <button onClick={()=> props.history.goBack()}>Go Back</button>}
      {folders}
-     <button>add Folder</button>
-     
+     {props.folders && <button>add Folder</button>}
    </div>
  )
 }
-
-/* "folders": [
-  {
-    "id": "b0715efe-ffaf-11e8-8eb2-f2801f1b9fd1",
-    "name": "Important"
-  }, */
