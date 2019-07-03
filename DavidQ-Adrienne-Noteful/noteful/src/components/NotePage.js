@@ -9,3 +9,4 @@ export default function NotePage(props) {
   </div>
  )
 }
+

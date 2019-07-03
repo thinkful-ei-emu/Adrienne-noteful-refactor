@@ -1,24 +1,35 @@
 import React from 'react';
-import Folder from './Folder';
+import AppContext from './AppContext';
 import {NavLink} from 'react-router-dom';
-import '../css/Nav.css'
-export default function Navigation(props) {
+import Folder from './Folder';
+import '../css/Nav.css';
 
-let folders = '';
 
-if (props.folders) {folders = props.folders.map((folder,index)=>{
-    return (
-    <NavLink className="Nav" isActive={()=>window.location.pathname === props.to }  key={index} to = {"/folder/"+ folder.id}>
-    <Folder  id={folder.id} name={folder.name}/>
-    </NavLink>)
-  });
-}
-console.log(<NavLink to="/"/>);
- return (
+export default class Navigation extends React.Component {
+  static contextType = AppContext;
+  render(){
+    if(!this.context){
+      return <p>Something went wrong</p>
+    }
+   
+    const {folders} = this.context;
+    let allFolders;
+    
+    if (folders) {
+      allFolders = folders.map((folder,index)=>{
+      return (
+      <NavLink className="Nav" isActive={()=> this.props.match.params.folderId === folder.id}  key={index} to = {"/folder/"+ folder.id}>
+      <Folder name={folder.name} />
+      </NavLink>)
+      });
+    }
+    console.log(folders);
+  return (
    <div className="side-bar">
-     {!props.folders && <button onClick={()=> props.history.goBack()}>Go Back</button>}
-     {folders}
-     {props.folders && <button>add Folder</button>}
+     {<button onClick={()=> this.props.history.goBack()}>Go Back</button>}
+     {allFolders}
+     {folders && <button>add Folder</button>}
    </div>
  )
+}
 }
