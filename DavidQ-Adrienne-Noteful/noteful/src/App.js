@@ -1,68 +1,116 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Redirect, Link} from 'react-router-dom';
 //--------------->components
 import List from './components/List';
 import Navigation from './components/Navigation';
 import Main from './components/Main';
 import NotePage from './components/NotePage';
 import AppContext from './components/AppContext';
-import Api from './Api';
+import Error from './components/Error';
+import ErrorBoundary from './components/ErrorBoundary';
+// import Api from './Api';
+import config from './config';
+import AddFolder from './components/AddFolder';
+import AddNote from './components/AddNote';
 //--------------CSS
 import './css/grid.css';
-import Error from './components/Error';
 import './App.css';
+
 
 export default class App extends React.Component {
   state={
-    ...this.props.DummyStore
+    ...this.props.DummyStore,
+    error: null,
+    deleteNote: false
   }
+
 
   componentDidMount() {
     Promise.all([
-      Api.fetchTheStuff('/folders'),
-      Api.fetchTheStuff('/notes')
-    ]).then(response => this.setState({folders: response[0], notes: response[1]}))
+      fetch(`${config.API_ENDPOINT}/folders`),
+      fetch(`${config.API_ENDPOINT}/notes`)
+    ]).then(([foldersRes, notesRes]) => {
+      if(!notesRes.ok) {
+        return notesRes.json().then(e => Promise.reject(e));
+      }
+      if(!foldersRes.ok) {
+        return foldersRes.json().then(e => Promise.reject(e));
+      }
+      return Promise.all([
+        notesRes.json(),
+        foldersRes.json()
+      ])
+    })
+    .then(([notes, folders]) => this.setState({ notes, folders }))
     .catch((error) => {
-      alert(`Something went wrong: ${error.message}`)
+      console.error({ error });
+    })
+
+  }
+
+  deleteNote = id => {
+    const newNotes = this.state.notes.filter(note => note.id !== id);
+    this.setState({ deleteNote: true, notes: newNotes }, () => {
+      setTimeout(() => { this.setState({ deleteNote: false }) }, 100)});
+  } 
+
+
+  handleAddFolder = folder => {
+    this.setState({
+      folders: [
+        ...this.state.folders,
+        folder
+      ]
+    });
+  }
+
+  handleAddNote = note => {
+    console.log('addnote');
+    this.setState({
+      notes: [
+        ...this.state.notes,
+        note
+      ]
     })
   }
 
-  deleteNote = (id) => {
-    Api.fetchTheStuff(`/notes`, id, 'DELETE')
-    this.setState({notes: this.state.notes.filter((note) => {
-      return note.id !== id;
-    })})
-    // need to fix the goBack at some point
-    this.props.history.goBack();
-  }  
-
   render(){
-    // console.log(this.props);
+    const contextValue = {
+      folders: this.state.folders,
+      notes: this.state.notes,
+      addFolder: this.handleAddFolder,
+      addNote: this.handleAddNote,
+      deleteNote: this.deleteNote
+    };
+    if(this.state.deleteNote === true) {
+      return (
+        <Redirect to='/' />
+      )
+    }
     return(
-      <AppContext.Provider value={{
-        folders: this.state.folders,
-        notes: this.state.notes,
-        deleteNote: this.deleteNote
-          }}>
+      <AppContext.Provider value={contextValue}>
       <header className = 'App-header'>
-        <h1>Noteful</h1>
+        <Link to='/' className='nav-link'>
+          <h1>Noteful</h1>
+        </Link>
       </header>
       <main className="container">
-        <div className='col'>
+        <div className='col' aria-live='polite'>
           <Route exact path='/' component={Navigation} />
-          {/* <Route exact path="/" render={(props)=>{return<Navigation {...props} folders={this.state.folders}/>}}/> */}
           <Route exact path="/folder/:folderId" component={Navigation}/>
           <Route path='/note/:noteId' component={Navigation} />
+          <Route path='/add-folder' component={Navigation} />
+          <Route path='/add-note' component={Navigation} />
         </div>
         <div className='col-3'>
-          <Route exact path='/' component={Main} />
-          <Route path='/folder/:folderId' component={List} />
-          {/* <Route exact path="/" render={(props)=>{return<Main {...props} notes={this.state.notes}/>}}/> */}
-          {/* <Route path="/folder/:folderId" render={(props)=>{return<List {...props} notes={this.state.notes.filter((note)=>{
-          return note.folderId === props.match.params.folderId
-        })} folderId={props.match.params.folderId}/>}}/> */}
-          <Route path="/note/:noteId" render={(props)=>{return <NotePage {...props} notes={this.state.notes.find((note)=>{
-            return note.id === props.match.params.noteId})}/>}} folderId={this.state.notes.folderId}/>
+          <ErrorBoundary>
+            <Route exact path='/' component={Main} />
+            <Route path='/folder/:folderId' component={List} />
+            <Route path="/note/:noteId" render={(props)=>{return <NotePage {...props} notes={this.state.notes.find((note)=>{
+              return note.id === props.match.params.noteId})}/>}} folderId={this.state.notes.folderId}/>
+          </ErrorBoundary>
+          <Route path='/add-folder' component={AddFolder} />
+          <Route path='/add-note' component={AddNote} />
           <Route path="/" Component={Error}/>
         </div>
       </main>

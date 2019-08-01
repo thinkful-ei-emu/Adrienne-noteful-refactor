@@ -1,9 +1,9 @@
 import React from 'react';
 import AppContext from './AppContext';
-import {NavLink} from 'react-router-dom';
+import {NavLink, Link} from 'react-router-dom';
 import Folder from './Folder';
 import '../css/Nav.css';
-
+import PropTypes from 'prop-types';
 
 export default class Navigation extends React.Component {
   static contextType = AppContext;
@@ -23,13 +23,17 @@ export default class Navigation extends React.Component {
       </NavLink>)
       });
     }
-    console.log(folders);
   return (
    <div className="side-bar">
      {<button onClick={()=> this.props.history.goBack()}>Go Back</button>}
      {allFolders}
-     {folders && <button>add Folder</button>}
+     {folders && <Link to='/add-folder'><button>Add Folder</button></Link>}
    </div>
  )
 }
+}
+
+Navigation.propTypes = {
+  folders: PropTypes.array,
+  history: PropTypes.object
 }
