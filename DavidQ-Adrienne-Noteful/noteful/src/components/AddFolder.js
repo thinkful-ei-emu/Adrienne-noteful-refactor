@@ -2,6 +2,7 @@ import React from 'react';
 import AppContext from './AppContext';
 import Form from './Form';
 import PropTypes from 'prop-types';
+import config from '../config';
 
 const Required = () => (
   <span className='AddFolderRequired'>*</span>
@@ -12,17 +13,17 @@ export default class AddFolder extends React.Component {
   
   handleSubmit = e => {
     e.preventDefault();
-    const folder = {
-      name: e.target['folder-name'].value
+    const folder_name = {
+      folder_name: e.target['folder-name'].value
     };
     this.setState({ error: null });
 
-    fetch(`http://localhost:9090/folders`, {
+    fetch(`${config.API_ENDPOINT}/folders`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify(folder)
+      body: JSON.stringify(folder_name)
     })
     .then(res => {
       if(!res.ok)

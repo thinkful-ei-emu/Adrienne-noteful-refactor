@@ -1,6 +1,5 @@
 import React from 'react';
-import '../css/folder.css'
-
+import '../css/folder.css';
 
 export default function Folder(props) {
     return (

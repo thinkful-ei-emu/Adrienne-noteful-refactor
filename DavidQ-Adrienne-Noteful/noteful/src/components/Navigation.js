@@ -19,7 +19,7 @@ export default class Navigation extends React.Component {
       allFolders = folders.map((folder,index)=>{
       return (
       <NavLink className="Nav" isActive={()=> this.props.match.params.folderId === folder.id}  key={index} to = {"/folder/"+ folder.id}>
-      <Folder name={folder.name} />
+      <Folder name={folder.folder_name} />
       </NavLink>)
       });
     }

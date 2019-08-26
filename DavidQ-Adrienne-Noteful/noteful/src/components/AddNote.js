@@ -2,6 +2,7 @@ import React from 'react';
 import AppContext from './AppContext';
 import Form from './Form';
 import PropTypes from 'prop-types';
+import config from '../config';
 
 const Required = () => (
   <span className='AddNoteRequired'>*</span>
@@ -13,11 +14,11 @@ export default class AddNote extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const note = {
-      name: e.target['note-name'].value
+      note_name: e.target['note-name'].value
     };
     this.setState({ error: null });
 
-    fetch(`http://localhost:9090/notes`, {
+    fetch(`${config.API_ENDPOINT}/notes`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'

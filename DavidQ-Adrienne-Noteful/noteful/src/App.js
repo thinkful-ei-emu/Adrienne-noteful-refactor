@@ -19,7 +19,8 @@ import './App.css';
 
 export default class App extends React.Component {
   state={
-    ...this.props.DummyStore,
+    notes: [],
+    folders: [],
     error: null,
     deleteNote: false
   }
@@ -65,7 +66,6 @@ export default class App extends React.Component {
   }
 
   handleAddNote = note => {
-    console.log('addnote');
     this.setState({
       notes: [
         ...this.state.notes,
@@ -107,7 +107,7 @@ export default class App extends React.Component {
             <Route exact path='/' component={Main} />
             <Route path='/folder/:folderId' component={List} />
             <Route path="/note/:noteId" render={(props)=>{return <NotePage {...props} notes={this.state.notes.find((note)=>{
-              return note.id === props.match.params.noteId})}/>}} folderId={this.state.notes.folderId}/>
+              return note.id === props.match.params.noteId})}/>}} folderId={this.state.notes.folder_id}/>
           </ErrorBoundary>
           <Route path='/add-folder' component={AddFolder} />
           <Route path='/add-note' component={AddNote} />

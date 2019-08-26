@@ -2,9 +2,10 @@ import React from 'react';
 import '../css/note.css';
 import AppContext from './AppContext';
 import PropTypes from 'prop-types';
+import config from '../config';
 
 function deleteNoteRequest(noteId, cb) {
-  fetch(`http://localhost:9090/notes/${noteId}`, {
+  fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
     method: 'DELETE',
   })
     .then(res => {

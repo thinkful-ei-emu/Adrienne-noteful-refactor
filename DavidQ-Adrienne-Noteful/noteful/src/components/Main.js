@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 
 export default function Main(props){
-
   return(
     <List notes={props.notes}/>
   );

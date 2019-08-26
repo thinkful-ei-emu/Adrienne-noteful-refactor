@@ -1,6 +1,6 @@
 export default class Api {
  static fetchTheStuff(url, id='', method='GET', body=null) {
-    const baseUrl = 'http://localhost:9090';
+    const baseUrl = 'http://localhost:8000';
     const options = {
       method,
       headers: new Headers({'content-type':'application/json'}),
