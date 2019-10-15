@@ -1,4 +1,7 @@
-.list{
+.note-list{
   border: 1px darkgray solid;
   grid-row-gap: 10px;
+  list-style-type: none;
+  padding-left: 0;
 }
+

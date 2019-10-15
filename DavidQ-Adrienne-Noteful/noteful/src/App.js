@@ -8,7 +8,6 @@ import NotePage from './components/NotePage';
 import AppContext from './components/AppContext';
 import Error from './components/Error';
 import ErrorBoundary from './components/ErrorBoundary';
-// import Api from './Api';
 import config from './config';
 import AddFolder from './components/AddFolder';
 import AddNote from './components/AddNote';
@@ -50,11 +49,21 @@ export default class App extends React.Component {
   }
 
   deleteNote = id => {
-    const newNotes = this.state.notes.filter(note => note.id !== id);
+    fetch(`${config.API_ENDPOINT}/notes/${id}`, {
+      method: 'DELETE',
+    })
+    .then(res =>
+      (!res.ok)
+      ? (e => Promise.reject(e))
+      : ''
+    )
+    .catch(error => {
+      console.error({ error });
+    })  
+    let newNotes = this.state.notes.filter(note => note.id !== id);
     this.setState({ deleteNote: true, notes: newNotes }, () => {
       setTimeout(() => { this.setState({ deleteNote: false }) }, 100)});
   } 
-
 
   handleAddFolder = folder => {
     this.setState({
@@ -82,6 +91,7 @@ export default class App extends React.Component {
       addNote: this.handleAddNote,
       deleteNote: this.deleteNote
     };
+
     if(this.state.deleteNote === true) {
       return (
         <Redirect to='/' />
@@ -104,7 +114,7 @@ export default class App extends React.Component {
         </div>
         <div className='col-3'>
           <ErrorBoundary>
-            <Route exact path='/' component={Main} />
+            <Route exact path='/' render={props => (<><Main match={props.match} /></>)} />
             <Route path='/folder/:folderId' component={List} />
             <Route path="/note/:noteId" render={(props)=>{return <NotePage {...props} notes={this.state.notes.find((note)=>{
               return note.id === props.match.params.noteId})}/>}} folderId={this.state.notes.folder_id}/>

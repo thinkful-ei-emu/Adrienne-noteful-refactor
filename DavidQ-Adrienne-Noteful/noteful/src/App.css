@@ -44,3 +44,32 @@ a {
 body {
   text-align: center;
 }
+
+
+#note-name-input, #folder-name-input {
+  margin-left: 5px;
+}
+
+textarea {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 5px;
+}
+
+.note-content {
+  display: block;
+  margin: 5px 0;
+}
+
+.error {
+  border: 2px solid red;
+  padding: 3px;
+  background-color: pink;
+}
+
+.error-button {
+  margin-left: 5px;
+  border: 1px solid red;
+  vertical-align: middle;
+  margin-bottom: 4px;
+}

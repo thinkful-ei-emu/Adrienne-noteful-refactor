@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function Main(props){
   return(
-    <List notes={props.notes}/>
+    <List notes={props.notes} match={props.match} />
   );
 }
 
